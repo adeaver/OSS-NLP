@@ -24,4 +24,24 @@ public class DeconstructedVerb {
 	public void setEndings(String[] endings) {
 		this.endings = endings;
 	}
+	
+	public String[] reconstructVerb() {
+		String[] output = new String[endings.length];
+		
+		for(int i = 0; i < endings.length; i++) {
+			output[i] = root + applyEnding(endings[i]);
+		}
+		
+		return output;
+	}
+	
+	private static String applyEnding(String input) {
+		if(input.equals("-AR")) {
+			return "ar";
+		} else if (input.equals("-IR")) {
+			return "ir";
+		}
+		
+		return "er";
+	}
 }
