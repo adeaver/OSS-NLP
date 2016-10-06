@@ -38,8 +38,8 @@ def count_bigrams(text_list, freq_array, pos_dict):
 
         pos = pos_dict.get(bigram, -1)
 
-        if(pos >= 0):
-            freq_array[pos] += 1
+        if(pos >= 0 and freq_array[pos] == 0):
+            freq_array[pos] = 1
 
     return freq_array
 

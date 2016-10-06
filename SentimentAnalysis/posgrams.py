@@ -33,7 +33,7 @@ def process_tag(tag):
 def should_add_bigram(tag1, tag2):
     if 'JJ' in tag1[1] and 'NN' in tag2[1]:
         return True
-    elif 'RB' in tag1[1] and 'JJ' in tag2[1]:
+    if 'RB' in tag1[1] and 'JJ' in tag2[1]:
         return True
     elif 'JJ' in tag1[1] and 'JJ' in tag2[1]:
         return True
