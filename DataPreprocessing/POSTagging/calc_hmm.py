@@ -35,20 +35,21 @@ def count_pos(gram_list, gram_counts):
 def database_dump(connection, word_counts, gram_counts, pos_tags, insertTags=False):
     cursor = connection.cursor()
     
-    insert_bigrams = "INSERT INTO transitions(bigram, count) VALUES(%s, %s) ON DUPLICATE KEY UPDATE count=count+%s"
-    insert_trigrams = "INSERT INTO trigrams(trigram, count) VALUES(%s, %s) ON DUPLICATE KEY UPDATE count=count+%s"
+    insert_bigrams = "INSERT INTO transitions(from_gram, to_gram, count) VALUES(%s, %s, %s) ON DUPLICATE KEY UPDATE count=count+%s"
+    insert_trigrams = "INSERT INTO trigrams(gram1, gram2, gram3, count) VALUES(%s, %s, %s, %s) ON DUPLICATE KEY UPDATE count=count+%s"
     insert_emissions = "INSERT INTO emissions(word, pos, count) VALUES(%s, %s, %s) ON DUPLICATE KEY UPDATE count=count+%s"
     insert_tags = "INSERT INTO pos_tags(pos) VALUES(%s)"
 
     for word in gram_counts.keys():
-        n = len(word.split())
+        gram = word.split()
+        n = len(gram)
         if(n == 2):
             bigram_c = str(gram_counts[word])
-            data = [word, bigram_c, bigram_c]
+            data = [gram[0], gram[1], bigram_c, bigram_c]
             cursor.execute(insert_bigrams, data)
         elif(n == 3):
             trigram_c = str(gram_counts[word])
-            data = [word, trigram_c, trigram_c]
+            data = [gram[0], gram[1], gram[2], trigram_c, trigram_c]
             cursor.execute(insert_trigrams, data)
 
     for word in word_counts.keys():
