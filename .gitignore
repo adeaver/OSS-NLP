@@ -11,3 +11,4 @@ POSTagging/src/main/resources
 SentimentAnalysis/txt_sentoken
 SentimentAnalysis/sets
 SentimentAnalysis/features
+DataPreprocessing/POSTagging/*.txt
