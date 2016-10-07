@@ -12,10 +12,15 @@ import com.ardeaver.postagging.dto.TransitionDto;
 public class TransitionDao {
 	private static final String GET_ALL_TRANSITIONS = "SELECT * FROM transitions;";
 	
+	private DatabaseManager dbm;
+	
+	public TransitionDao() {
+		dbm = new DatabaseManager();
+	}
+	
 	public List<TransitionDto> getTransitions() {
 		List<TransitionDto> dtos = new ArrayList<TransitionDto>();
 		
-		DatabaseManager dbm = new DatabaseManager();
 		Connection c = dbm.getConnection();
 		
 		PreparedStatement pstmt = null;
