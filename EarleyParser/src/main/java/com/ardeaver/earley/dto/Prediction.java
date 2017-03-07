@@ -93,7 +93,7 @@ public class Prediction implements Comparable<Prediction> {
 		String childString = "";
 		
 		for(int i = 0; i <= this.getChildren().size(); i++) {
-			if(i == this.getEndIndex()) {
+			if(i == this.getPointerIndex()) {
 				childString += "* ";
 			}
 			if(i < this.getChildren().size()) {

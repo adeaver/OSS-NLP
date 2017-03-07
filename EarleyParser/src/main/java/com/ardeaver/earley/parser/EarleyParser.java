@@ -52,7 +52,7 @@ public class EarleyParser {
 							chart.get(i+1).add(np);
 						}
 					} else {
-						predictions = predict(prediction.getChildren().get(prediction.getPointerIndex()), prediction.getStartIndex(), prediction.getEndIndex());
+						predictions = predict(prediction.getChildren().get(prediction.getPointerIndex()), prediction.getEndIndex(), prediction.getEndIndex());
 						
 						for(Prediction p : predictions) {
 							if(!chart.get(i).contains(p)) {
@@ -64,8 +64,26 @@ public class EarleyParser {
 			}
 		}
 		
-		System.out.println("End Size: " + chart.get(chart.size()-1).size());
-		System.out.println("End: " + chart.get(chart.size()-1));
+		List<Prediction> finalPredictions = new ArrayList<Prediction>();
+		
+		for(int j = 0; j < chart.get(chart.size()-1).size(); j++) {
+			prediction = chart.get(chart.size()-1).get(j);
+			if(prediction.getStartIndex() == 0 && prediction.getEndIndex() == tokens.size()) {
+				finalPredictions.add(prediction);
+			}
+			if(prediction.getChildren().size() <= prediction.getPointerIndex()) {
+				List<Prediction> p = complete(chart.get(prediction.getStartIndex()), prediction);
+				
+				for(Prediction p1 : p) {
+					if(!finalPredictions.contains(p1) && p1.getStartIndex() == 0 & p1.getEndIndex() == tokens.size() && p1.getPointerIndex() == p1.getChildren().size()) {
+						finalPredictions.add(p1);
+					}
+				}
+			}
+		}
+		
+		System.out.println("End Size: " + finalPredictions.size());
+		System.out.println("End: " + finalPredictions);
 		
 		return null;
 	}

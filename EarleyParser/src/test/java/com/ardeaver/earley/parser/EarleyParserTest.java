@@ -11,7 +11,7 @@ public class EarleyParserTest {
 	
 	@Test
 	public void testBasic() {
-		String input = "Book that flight";
+		String input = "Book the flight";
 		
 		parser.parseSentence(input);
 	}
