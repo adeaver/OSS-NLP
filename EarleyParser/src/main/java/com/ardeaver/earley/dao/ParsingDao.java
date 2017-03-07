@@ -19,7 +19,7 @@ public class ParsingDao {
 		db = new ParsingDBManager();
 	}
 	
-	public List<Prediction> getPredictionsForRoot(String root) {
+	public List<Prediction> getPredictionsForRoot(String root, int beginIndex, int endIndex) {
 		List<Prediction> predictions = new ArrayList<Prediction>();
 		
 		Connection c = db.getConnection();
@@ -39,7 +39,7 @@ public class ParsingDao {
 				while(rs.next()) {
 					parses = convertArrayToList(rs.getString("parse").split("\\s+"));
 					count = rs.getInt("count");
-					predictions.add(new Prediction(root, parses, count));
+					predictions.add(new Prediction(root, parses, count, beginIndex, endIndex));
 				}
 			} catch(SQLException e) {
 				e.printStackTrace();

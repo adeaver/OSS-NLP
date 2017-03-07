@@ -71,6 +71,8 @@ public class PartOfSpeechDao {
 			try {
 				pstmt = c.prepareStatement(GET_PART_OF_SPEECH_FOR_WORD);
 				
+				pstmt.setString(1, word);
+				
 				rs = pstmt.executeQuery();
 				
 				String pos;
