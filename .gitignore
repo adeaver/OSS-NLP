@@ -12,3 +12,4 @@ SentimentAnalysis/txt_sentoken
 SentimentAnalysis/sets
 SentimentAnalysis/features
 DataPreprocessing/POSTagging/*.txt
+Corpora/
