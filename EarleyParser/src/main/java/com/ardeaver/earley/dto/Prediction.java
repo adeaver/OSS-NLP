@@ -6,7 +6,7 @@ public class Prediction implements Comparable<Prediction> {
 	private String root;
 	private List<String> children;
 	private int count;
-	private int startIndex, endIndex;
+	private int startIndex, endIndex, pointerIndex;
 	
 	public Prediction(String root, List<String> children, int count) {
 		this(root, children, count, 0, 0);
@@ -18,6 +18,7 @@ public class Prediction implements Comparable<Prediction> {
 		this.count = count;
 		this.startIndex = startIndex;
 		this.endIndex = endIndex;
+		this.pointerIndex = 0;
 	}
 
 	public String getRoot() {
@@ -58,6 +59,14 @@ public class Prediction implements Comparable<Prediction> {
 
 	public void setEndIndex(int endIndex) {
 		this.endIndex = endIndex;
+	}
+
+	public int getPointerIndex() {
+		return pointerIndex;
+	}
+
+	public void setPointerIndex(int pointerIndex) {
+		this.pointerIndex = pointerIndex;
 	}
 
 	@Override

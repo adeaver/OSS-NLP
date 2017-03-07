@@ -26,7 +26,7 @@ public class EarleyParser {
 		String root = "S";
 		List<Prediction> predictions = predict(root, 0, 0);
 		
-		Prediction prediction;
+		Prediction prediction, np;
 		
 		chart.add(new ArrayList<Prediction>());
 		chart.get(0).addAll(predictions);
@@ -36,7 +36,7 @@ public class EarleyParser {
 			
 			for(int j = 0; j < chart.get(i).size(); j++) {
 				prediction = chart.get(i).get(j);
-				if(prediction.getChildren().size() <= prediction.getEndIndex()) {
+				if(prediction.getChildren().size() <= prediction.getPointerIndex()) {
 					List<Prediction> p = complete(chart.get(prediction.getStartIndex()), prediction);
 					
 					for(Prediction p1 : p) {
@@ -45,12 +45,14 @@ public class EarleyParser {
 						}
 					}
 				} else {
-					if(terminals.contains(prediction.getChildren().get(prediction.getEndIndex()))) {
-						if(scan(tokens.get(i), prediction.getChildren().get(prediction.getEndIndex()))) {
-							chart.get(i+1).add(new Prediction(prediction.getRoot(), prediction.getChildren(), prediction.getCount(), prediction.getStartIndex(), prediction.getEndIndex()+1));
+					if(terminals.contains(prediction.getChildren().get(prediction.getPointerIndex()))) {
+						if(scan(tokens.get(i), prediction.getChildren().get(prediction.getPointerIndex()))) {
+							np = new Prediction(prediction.getRoot(), prediction.getChildren(), prediction.getCount(), prediction.getStartIndex(), prediction.getEndIndex()+1);
+							np.setPointerIndex(np.getPointerIndex()+1);
+							chart.get(i+1).add(np);
 						}
 					} else {
-						predictions = predict(prediction.getChildren().get(prediction.getEndIndex()), i, prediction.getEndIndex());
+						predictions = predict(prediction.getChildren().get(prediction.getPointerIndex()), prediction.getStartIndex(), prediction.getEndIndex());
 						
 						for(Prediction p : predictions) {
 							if(!chart.get(i).contains(p)) {
@@ -81,8 +83,9 @@ public class EarleyParser {
 		Prediction np;
 		
 		for(Prediction p1 : predictions) {
-			if(p1.getChildren().size() > p1.getEndIndex() && p1.getChildren().get(p1.getEndIndex()).equals(p.getRoot())) {
-				np = new Prediction(p1.getRoot(), p1.getChildren(), p1.getCount(), p1.getStartIndex(), p1.getEndIndex()+1);
+			if(p1.getChildren().size() > p1.getEndIndex() && p1.getChildren().get(p1.getPointerIndex()).equals(p.getRoot())) {
+				np = new Prediction(p1.getRoot(), p1.getChildren(), p1.getCount(), p1.getStartIndex(), p.getEndIndex());
+				np.setPointerIndex(p1.getPointerIndex()+1);
 				newPredictions.add(np);
 			}
 		}
