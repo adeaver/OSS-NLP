@@ -76,7 +76,7 @@ public class PairEntity implements Entity, Cloneable {
 		if(arg0 instanceof PairEntity) {
 			PairEntity arg = (PairEntity) arg0;
 			
-			if(arg.head.equals(head) && arg.children.equals(children)) {
+			if(arg.toString().equals(this.toString())) {
 				return true;
 			}
 		}

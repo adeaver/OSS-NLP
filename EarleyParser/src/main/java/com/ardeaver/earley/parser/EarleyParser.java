@@ -68,7 +68,7 @@ public class EarleyParser {
 		return list;
 	}
 	
-	private void addNoDuplicates(List<PairEntity> entities, List<PairEntity> newEntities) {
+	void addNoDuplicates(List<PairEntity> entities, List<PairEntity> newEntities) {
 		for(PairEntity p : newEntities) {
 			if(!entities.contains(p)) {
 				entities.add(p);
