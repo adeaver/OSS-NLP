@@ -7,6 +7,7 @@ public class PairEntity implements Entity, Cloneable {
 	private SingleEntity head;
 	private List<Entity> children;
 	private int star, startIndex, endIndex;
+	private String representation;
 	
 	public PairEntity(SingleEntity head, List<Entity> children, int star, int startIndex, int endIndex) {
 		this.head = head;
@@ -14,6 +15,7 @@ public class PairEntity implements Entity, Cloneable {
 		this.star = star;
 		this.startIndex = startIndex;
 		this.endIndex = endIndex;
+		this.representation = null;
 	}
 	
 	public String getHead() {
@@ -65,6 +67,22 @@ public class PairEntity implements Entity, Cloneable {
 		return child;
 	}
 	
+	public String getEqualsString() {
+		if(representation == null) {
+			representation = head.getEntity() + " -> ";
+			
+			for(int i = 0; i < children.size(); i++) {
+				representation += children.get(i).getHead() + " ";
+			}
+			
+			representation = representation.trim();
+			
+			return representation;
+		}
+		
+		return representation;
+	}
+	
 	@Override
 	public PairEntity clone() {
 		List<Entity> childrenCopy = new ArrayList<Entity>(this.children);
@@ -76,7 +94,7 @@ public class PairEntity implements Entity, Cloneable {
 		if(arg0 instanceof PairEntity) {
 			PairEntity arg = (PairEntity) arg0;
 			
-			if(arg.toString().equals(this.toString())) {
+			if(arg.getEqualsString().equals(this.getEqualsString())) {
 				return true;
 			}
 		}

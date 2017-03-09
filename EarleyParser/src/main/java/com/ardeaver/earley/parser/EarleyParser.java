@@ -3,7 +3,6 @@ package com.ardeaver.earley.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ardeaver.earley.entity.Entity;
 import com.ardeaver.earley.entity.PairEntity;
 import com.ardeaver.earley.service.Completer;
 import com.ardeaver.earley.service.Predictor;
@@ -20,13 +19,13 @@ public class EarleyParser {
 		completer = new Completer();
 	}
 	
-	public Entity parseSentence(String input) {
+	public List<PairEntity> parseSentence(String input) {
 		List<String> tokens = tokenize(input);
 		List<List<PairEntity>> chart = new ArrayList<List<PairEntity>>();
 		
 		PairEntity entity, newEntity;
 		
-		chart.add(predictor.getInitialList());
+		chart.add(filterTooLong(predictor.getInitialList(), tokens.size()));
 		
 		for(int i = 0; i < tokens.size(); i++) {
 			
@@ -37,7 +36,7 @@ public class EarleyParser {
 				entity = chart.get(i).get(j);
 				
 				if(entity.isComplete()) {
-					chart.get(i).addAll(completer.complete(chart.get(entity.getStartIndex()), entity));
+					filterAdditions(chart.get(i), completer.complete(chart.get(entity.getStartIndex()), entity));
 				} else {
 					if(scanner.isTerminal(entity.getNext())) {
 						newEntity = scanner.scan(entity, entity.getNext(), tokens.get(i));
@@ -46,15 +45,22 @@ public class EarleyParser {
 							chart.get(i+1).add(newEntity);
 						}
 					} else {
-						addNoDuplicates(chart.get(i), predictor.predict(entity));
+						filterAdditions(chart.get(i), filterTooLong(predictor.predict(entity), tokens.size()-i));
 					}
 				}
 			}
 		}
 		
-		System.out.println(chart.get(tokens.size()));
+		List<PairEntity> finalPairs = new ArrayList<PairEntity>();
+		PairEntity pairEntity;
 		
-		return null;
+		for(int j = 0; j < chart.get(tokens.size()).size(); j++) {
+			pairEntity = chart.get(tokens.size()).get(j);
+			
+			finalPairs.addAll(completer.complete(chart.get(pairEntity.getStartIndex()), pairEntity));
+		}
+		
+		return filterFinalAdditions(finalPairs);
 	}
 	
 	private List<String> tokenize(String input) {
@@ -68,11 +74,35 @@ public class EarleyParser {
 		return list;
 	}
 	
-	void addNoDuplicates(List<PairEntity> entities, List<PairEntity> newEntities) {
+	private List<PairEntity> filterTooLong(List<PairEntity> pairs, int maxTokens) {
+		List<PairEntity> filtered = new ArrayList<PairEntity>();
+		
+		for(int i = 0; i < pairs.size(); i++) {
+			if(pairs.get(i).getChildren().size() <= maxTokens) {
+				filtered.add(pairs.get(i));
+			}
+		}
+		
+		return filtered;
+	}
+	
+	void filterAdditions(List<PairEntity> entities, List<PairEntity> newEntities) {
 		for(PairEntity p : newEntities) {
-			if(!entities.contains(p)) {
+			if(!entities.contains(p) && !p.getHead().equals("QUOTE")) {
 				entities.add(p);
 			}
 		}
+	}
+	
+	private List<PairEntity> filterFinalAdditions(List<PairEntity> toFinish) {
+		List<PairEntity> finished = new ArrayList<PairEntity>();
+		
+		for(PairEntity pair : toFinish) {
+			if(pair.isComplete()) {
+				finished.add(pair);
+			}
+		}
+		
+		return finished;
 	}
 }

@@ -14,9 +14,57 @@ public class ParsingDao {
 	private ParsingDBManager db;
 	
 	private static final String FIND_PREDICTIONS = "SELECT * FROM parses WHERE root=?";
+	private static final String FIND_ALL_PREDICTIONS = "SELECT * FROM parses";
 	
 	public ParsingDao() {
 		db = new ParsingDBManager();
+	}
+	
+	public List<Prediction> getAllPredictions() {
+		List<Prediction> predictions = new ArrayList<Prediction>();
+		
+		Connection c = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		if(c != null) {
+			try {
+				pstmt = c.prepareStatement(FIND_ALL_PREDICTIONS);
+				
+				rs = pstmt.executeQuery();
+				
+				String root;
+				List<String> parses;
+				int count;
+				
+				while(rs.next()) {
+					parses = convertArrayToList(rs.getString("parse").split("\\s+"));
+					count = rs.getInt("count");
+					root = rs.getString("root");
+					predictions.add(new Prediction(root, parses, count));
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if(c != null) {
+						c.close();
+					}
+					
+					if(pstmt != null) {
+						pstmt.close();
+					}
+					
+					if(rs != null) {
+						rs.close();
+					}
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return predictions;
 	}
 	
 	public List<Prediction> getPredictionsForRoot(String root) {

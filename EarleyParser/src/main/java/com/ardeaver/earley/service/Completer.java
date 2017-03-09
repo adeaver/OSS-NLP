@@ -13,7 +13,7 @@ public class Completer {
 		PairEntity copy;
 		
 		for(PairEntity p : pairs) {
-			if(p.getNext().getHead().equals(completed.getHead())) {
+			if(p.getNext() != null && p.getNext().getHead().equals(completed.getHead())) {
 				copy = p.clone();
 				copy.advanceStar(completed);
 				
