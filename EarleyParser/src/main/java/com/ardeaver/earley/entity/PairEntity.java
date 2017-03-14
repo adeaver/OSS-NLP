@@ -18,6 +18,15 @@ public class PairEntity implements Entity, Cloneable {
 		this.representation = null;
 	}
 	
+	public PairEntity(PairEntity copy) {
+		this.head = copy.head;
+		this.children = copy.children;
+		this.star = copy.star;
+		this.startIndex = copy.startIndex;
+		this.endIndex = copy.endIndex;
+		this.representation = null;
+	}
+	
 	public String getHead() {
 		return head.getEntity();
 	}

@@ -20,7 +20,7 @@ public class EarleyParserTest {
 	
 	@Test
 	public void testBasic() {
-		String input = "I go there";
+		String input = "Wake him up";
 		
 		List<PairEntity> parses = parser.parseSentence(input);
 		System.out.println(parses.toString());
