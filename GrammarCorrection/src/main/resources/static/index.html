@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Alea</title>
+	<style>
+		#logo {
+			top:0px;
+			display:block;
+			margin:auto;
+		}
+
+		textarea {
+		  margin-top: 10px;
+		  margin-left: 50px;
+		  width: 500px;
+		  height: 100px;
+		  -moz-border-bottom-colors: none;
+		  -moz-border-left-colors: none;
+		  -moz-border-right-colors: none;
+		  -moz-border-top-colors: none;
+		  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+		  border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+		  border-image: none;
+		  border-radius: 6px 6px 6px 6px;
+		  border-style: none solid solid none;
+		  border-width: medium 1px 1px medium;
+		  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+		  color: #555555;
+		  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		  font-size: 1em;
+		  line-height: 1.4em;
+		  padding: 5px 8px;
+		  transition: background-color 0.2s ease 0s;
+		}
+
+
+		textarea:focus {
+		    background: none repeat scroll 0 0 #FFFFFF;
+		    outline-width: 0;
+		}
+
+		.ph-button {
+			
+		    border-style: solid;
+		    border-width: 0px 0px 3px;
+		    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+		    color: #FFFFFF;	   
+		    border-radius: 6px;
+		    cursor: pointer;
+		    display: inline-block;
+		    font-style: normal;
+		    overflow: hidden;
+		    text-align: center;
+		    text-decoration: none;
+		    text-overflow: ellipsis;
+		    transition: all 200ms ease-in-out 0s;
+		    white-space: nowrap;	
+		    font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+		    font-weight: 700;	
+		    padding: 19px 39px 18px;
+		    font-size: 18px;
+			
+		}
+		/*Green
+		==========================*/
+		.ph-btn-green {
+
+		    border-color: #3AC162;
+			background-color: #5FCF80;
+
+		}
+		.ph-btn-green:hover, .ph-btn-green:focus, .ph-btn-green:active {
+		    background-color: #4BC970;
+		    border-color: #3AC162;    
+		}
+
+		/*Blue
+		==========================*/
+		.ph-btn-blue {
+
+		    border-color: #326E99;
+		    background-color: #3F8ABF;
+		}
+
+		.ph-btn-blue:hover, .ph-btn-blue:focus, .ph-btn-blue:active {
+		    background-color: #397CAC;
+		    border-color: #326E99;   
+		}
+
+		/*Grey
+		==========================*/
+		.ph-btn-grey {
+
+		     background-color: #C6CCD2;
+		     border-color: #AAB3BB;
+		}
+		.ph-btn-grey:hover, .ph-btn-grey:focus, .ph-btn-grey:active {
+		    background-color: #B8BFC7;
+		    border-color: #AAB3BB; 
+		}
+
+		/*Red
+		==========================*/
+		.ph-btn-red {
+
+		    background-color: #ED5A5A !important;
+		    border-color: #EA4343 !important;
+
+		}
+		.ph-btn-red:hover, .ph-btn-red:focus, .ph-btn-red:active {
+		    background: none repeat scroll 0 0 #EB4848 !important;
+		    border-color: #E83131 !important;    
+		}
+
+
+		/*DEMO ONLY FOR CENTER POSITION*/
+		.ph-container {
+		  
+		  margin: 0 auto;
+		  display: inline;
+
+		  
+		}
+
+		.ph-float {
+		  width: 22%;
+		  padding: 10px;  
+		  padding-top: 50px;  
+		  text-align: center;
+
+		}
+
+		.ph-clear {
+		  
+		  clear: both;
+		   
+		}
+
+		#textbox {
+			display:block;
+			margin:auto;
+		}
+
+		#button {
+			display:block;
+			margin:auto;
+		}
+
+		.correct {
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		  	font-size: 3em;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			$("#correction_button").click(function() {
+				$.ajax({
+					url:"/correct?sentence=" + $("#textbox").val(),
+					success: function(data, text, jh) {
+						var html = "";
+						console.log(data);
+
+						var stop = data.corrections.length;
+						for(var i = 0; i < stop; i++) {
+							html += "<li class='correct' style='text-align:center;'>" + data.corrections[i]["sentence"] + "</li>";
+						}
+
+						$("#corrections").html(html);
+					}
+				});
+			});
+		});
+		
+	</script>
+</head>
+
+<body>
+	<img src="logo_small.png" id="logo" />
+	<br />
+	<textarea id="textbox" placeholder="Type something to correct..."></textarea>
+    <div class="ph-float" style="display:block;margin:auto;">
+        <button id="correction_button" class='ph-button ph-btn-green'>Correct</a>
+    </div> 
+
+    <hr />
+    <h1 style="text-align:center;">Corrections</h1>
+    <ul style="display:block;margin:auto;list-style:none;" id="corrections">
+
+    </ul>
+</body>
+
+</html>
